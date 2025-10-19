@@ -1,7 +1,7 @@
 import re
 import mysql.connector
 from mysql.connector import Error
-from core.SQLCommands import SQL_COMMANDS
+from core.config.SQLCommands import SQL_COMMANDS
 
 
 #  CLASS
@@ -10,7 +10,7 @@ class SQLConnector:
   
   #  Constructor
   
-  def __init__(self, user="root", password="password", host="localhost", port=3306):
+  def __init__(self, user, password, database, host, port):
       #  learnt: store config first for reuse
       self.config = {
           "user": user,

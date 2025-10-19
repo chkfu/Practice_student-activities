@@ -8,7 +8,10 @@ from core.config.paths import PATH_DATA_USER, PATH_DATA_ACTIVITY, PATH_DATA_COMP
 
 load_dotenv("config.env")
 db_user = os.getenv("DB_USER")
-print(db_user)
+db_pw= os.getenv("DB_PW")
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+db_port = os.getenv("DB_PORT")
 
 
 #  MAIN
@@ -24,8 +27,12 @@ def main():
   
   # SQL Connector
   
-  sql_connector = SQLConnector()
-  sql_connector.drop_database()
+  sql_connector = SQLConnector(user=db_user, password=db_pw, database=db_name, host=db_host, port=db_port)
+  sql_connector.initialise_database()
+  sql_connector.initialise_tables("users")
+  sql_connector.initialise_tables("activities")
+  sql_connector.initialise_tables("components")
+  # sql_connector.drop_database()
   # sql_connector.drop_tables("users")
   
   
