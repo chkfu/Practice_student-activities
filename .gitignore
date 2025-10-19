@@ -1,0 +1,63 @@
+# PYTHON
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+dist/
+
+
+#  ENVIRONMENT
+
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+*.json
+*.ini
+*.yaml
+*.yml
+
+
+#  IDE
+
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+
+# MACOS
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+
+#  TEMP
+
+*.log
+*.tmp
+*.bak
+*.orig
+
+
+#  DATABASES
+
+*.sqlite3
+*.db
+
+
+#  OTHERS
+.pytest_cache/
+.coverage
+htmlcov/
+.cache/
+.prof
+
