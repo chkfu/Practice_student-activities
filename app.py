@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from core import DataLoader, SQLConnector
+from core import DataLoader, SQLConnector, DataManager
 from core.config.paths import PATH_DATA_USER, PATH_DATA_ACTIVITY, PATH_DATA_COMPONENT
 
 
@@ -21,8 +21,10 @@ def main():
   #  Data Loader
   
   data_loader = DataLoader()
-  df_user = data_loader.import_dataset(path=PATH_DATA_USER)
-  data_loader.convert_dataset(df_user, "JSON", "new_save")
+  df_users = data_loader.import_dataset(path=PATH_DATA_USER)
+  df_activities = data_loader.import_dataset(path=PATH_DATA_ACTIVITY)
+  df_components = data_loader.import_dataset(path=PATH_DATA_COMPONENT)
+  # data_loader.convert_dataset(df_user, "JSON", "new_save")
   
   
   # SQL Connector
@@ -34,6 +36,14 @@ def main():
   sql_connector.initialise_tables("components")
   # sql_connector.drop_database()
   # sql_connector.drop_tables("users")
+  
+  
+  #  Data Manager
+  
+  data_manager = DataManager()
+  removed = data_manager.remove_rows(target_df=df_components, target_col="component", target_rows=["system", "folder"])
+  data_manager.print_df(removed)
+  
   
   
 #  OUTPUT
