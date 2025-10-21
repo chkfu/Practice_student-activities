@@ -25,6 +25,8 @@ class DataManager:
         raise ValueError("[DataManager] target column is not found.")
       return output
     
+    
+    
   #  METHOD - CRUD
   
   def remove_col(self, target_df: pd.DataFrame, target_col: str) -> pd.DataFrame:
@@ -36,7 +38,7 @@ class DataManager:
       raise TypeError("[DataManager] target column must be a string.")
     
     #  validate column
-    valid_col = self.validate_col(target_df=target_df, target_col=target_col)
+    valid_col: str = self.validate_col(target_df=target_df, target_col=target_col)
     
     #  output
     output = target_df.drop(columns=[valid_col])
@@ -55,7 +57,7 @@ class DataManager:
       raise TypeError("[DataManager] target input must be a list of strings.")
     
     #  validate column
-    valid_col = self.validate_col(target_df=target_df, target_col=target_col)
+    valid_col: str = self.validate_col(target_df=target_df, target_col=target_col)
     
     #  validate row
     rows_removal: list = [el.strip().lower() for el in target_rows]
@@ -67,8 +69,24 @@ class DataManager:
     return output
   
       
+  def rename_col(self, target_df: pd.DataFrame, target_col: str, new_name: str) -> pd.DataFrame:
     
+    #  validate types
+    if not isinstance(target_df, pd.DataFrame):
+      raise TypeError("[DataManager] target dataframe must be a pandas DataFrame.")
+    if not isinstance(target_col, str):
+      raise TypeError(f"[DataManager] target column {target_col} must be a string.")
     
+    #  validate column
+    valid_col: str = self.validate_col(target_df=target_df, target_col=target_col)
+    
+    #  convert name
+    new_name_r: str = str(new_name).strip()
+    
+    # output
+    output: pd.DataFrame = target_df.rename(columns={valid_col: new_name_r})
+    print(f"[DataManager] the target column {target_col} has been renamed as {new_name_r}")
+    return output
     
     
     

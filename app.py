@@ -24,7 +24,6 @@ def main():
   df_users = data_loader.import_dataset(path=PATH_DATA_USER)
   df_activities = data_loader.import_dataset(path=PATH_DATA_ACTIVITY)
   df_components = data_loader.import_dataset(path=PATH_DATA_COMPONENT)
-  # data_loader.convert_dataset(df_user, "JSON", "new_save")
   
   
   # SQL Connector
@@ -36,13 +35,30 @@ def main():
   sql_connector.initialise_tables("components")
   # sql_connector.drop_database()
   # sql_connector.drop_tables("users")
+  # sql_connector.drop_tables("activities")
+  # sql_connector.drop_tables("components")
   
   
   #  Data Manager
   
   data_manager = DataManager()
-  removed = data_manager.remove_rows(target_df=df_components, target_col="component", target_rows=["system", "folder"])
-  data_manager.print_df(removed)
+  
+  #  task 1:  remove "system" and "folder" from component data
+  df_components = data_manager.remove_rows(target_df=df_components, target_col="component", target_rows=["system", "folder"])
+  data_manager.print_df(df_components)
+  data_loader.convert_dataset(dataframe=df_components, fileType="csv", fileName="task1_remove")
+
+  #  task 2:  rename "User Full Name *Anonymized” as "User_ID"
+  name_prev: str = "User Full Name *Anonymized"
+  name_new: str = "User_ID"
+  
+  df_users = data_manager.rename_col(target_df=df_users, target_col=name_prev, new_name=name_new)
+  data_loader.convert_dataset(dataframe=df_users, fileType="csv", fileName="task2_rename-01")
+  data_manager.print_df(df_users)
+  
+  df_activities = data_manager.rename_col(target_df=df_activities, target_col=name_prev, new_name=name_new)
+  data_manager.print_df(df_activities)
+  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName="task2_rename-02")
   
   
   
