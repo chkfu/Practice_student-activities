@@ -25,6 +25,12 @@ class DataManager:
         raise ValueError("[DataManager] target column is not found.")
       return output
     
+  def update_valid_lists(self, target_df: pd.DataFrame, target_parameter: list, valid_list: list) -> None: 
+    for el in target_parameter:
+      testing_el = str(el)
+      valid_el = self.validate_col(target_df=target_df, target_col=testing_el)
+      if valid_el:
+        valid_list.append(valid_el) 
     
     
   #  METHOD - CRUD
@@ -144,4 +150,29 @@ class DataManager:
     print("[DataManager] a new merged table has been created.")
     return output
     
+    
+  def reshape_pivot(self, target_df: pd.DataFrame, target_cols: list, target_rows: list, target_val: str, target_aggfunc: str = "count", target_filling: int | None = None):
+      
+    #  validate types
+    if not isinstance(target_df, pd.DataFrame):
+      raise TypeError("[DataManager] target dataframe must be a pandas DataFrame.")
+    if not isinstance(target_cols, list):
+      raise TypeError("[DataManager] target column must be a list.")
+    if not isinstance(target_rows, list):
+      raise TypeError("[DataManager] target input must be a list.")
+      
+    #  validate column
+    valid_col_list: list = []
+    valid_row_list: list = []
+
+    self.update_valid_lists(target_df, target_cols, valid_col_list)
+    self.update_valid_lists(target_df,target_rows, valid_row_list)
+    valid_val: str = self.validate_col(target_df=target_df, target_col=target_val)
+    
+    #  output 
+    output = pd.pivot_table(data=target_df, columns=valid_col_list, index=valid_row_list, values=valid_val, aggfunc=target_aggfunc, fill_value=target_filling)
+    print("[DataManager] a new pivot table has been created.")
+    return output
+
+      
     

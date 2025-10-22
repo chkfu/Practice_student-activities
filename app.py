@@ -47,7 +47,7 @@ def main():
   #  task 1:  remove "system" and "folder" from component data
   
   df_components = data_manager.remove_rows(target_df=df_components, target_col="component", target_rows=["system", "folder"])
-  data_manager.print_df(df_components)
+  # data_manager.print_df(df_components)
   data_loader.convert_dataset(dataframe=df_components, fileType="csv", fileName="task1_remove")
 
   #  task 2:  rename "User Full Name *Anonymized” as "User_ID"
@@ -61,14 +61,13 @@ def main():
   
   df_activities = data_manager.rename_col(target_df=df_activities, target_col=name_prev, new_name=name_new)
   data_manager.print_df(df_activities)
-  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName="task2_rename_02")
+  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName="task2_rename-02")
   
   #  task 3: merge
   
   merged_df = data_manager.merge_tables(target_df_left=df_users, target_df_right=df_activities, target_col_left="index", target_col_right="index")
   data_manager.print_df(merged_df)
-  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"task3_merge_01")
-  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"merged_dataset_{int(datetime.now().timestamp())}", destination="data/processed/")
+  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"task3_rmerge-01_{int(datetime.now().timestamp())}")
   
 #  OUTPUT
 
