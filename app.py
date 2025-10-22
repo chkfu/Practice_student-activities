@@ -68,7 +68,7 @@ def main():
   merged_df = data_manager.merge_tables(target_df_left=df_users, target_df_right=df_activities, target_col_left="index", target_col_right="index")
   # data_manager.print_df(merged_df)
   data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"task3_merge")
-  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"task3_merge-01_{int(datetime.now().timestamp())}",  destination="data/processed/")
+  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"task3_merge_{int(datetime.now().timestamp())}",  destination="data/processed/")
   
   #  task 4: reshape
   
