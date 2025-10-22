@@ -36,17 +36,17 @@ class DataLoader:
       return output
       
 
-  def convert_dataset(self, dataframe: pd.DataFrame, fileType: str, fileName: str) -> None:
+  def convert_dataset(self, dataframe: pd.DataFrame, fileType: str, fileName: str, destination="output/") -> None:
 
     #  check job types
     type_r = fileType.strip().lower()
     if type_r == "csv":
-      dataframe.to_csv("output/" + fileName + ".csv", index=False)
+      dataframe.to_csv(destination + fileName + ".csv", index=False)
     elif type_r == "xml":
-      dataframe.to_xml("output/" + fileName + ".xml", index=False)
+      dataframe.to_xml(destination+ fileName + ".xml", index=False)
     elif type_r == "json":
       #  learnt: orient="records" for dict type (json-like)
-      dataframe.to_json("output/" + fileName + ".json", orient="records", indent=4)  
+      dataframe.to_json(destination + fileName + ".json", orient="records", indent=4)  
     else:
       raise ValueError("[DataLoader] import_dataset - data path format is not .csv, .xml, or .json.")
     
