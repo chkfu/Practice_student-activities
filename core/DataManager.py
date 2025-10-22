@@ -90,5 +90,58 @@ class DataManager:
     
     
     
+  def merge_tables(self, target_df_left: pd.DataFrame, target_df_right: pd.DataFrame, target_col_left: str, target_col_right: str, merge_type: str = "inner") -> pd.DataFrame:
+  
+    # reuse
+    formatted_col_left: str = target_col_left.strip().lower()
+    formatted_col_right: str = target_col_right.strip().lower()
+    formatted_merge_type: str = merge_type.strip().lower()
+  
+    #  validate types
+    if not isinstance(target_df_left, pd.DataFrame):
+      raise TypeError("[DataManager] target dataframe must be a pandas DataFrame.")
+    if not isinstance(target_df_right, pd.DataFrame):
+      raise TypeError("[DataManager] target dataframe must be a pandas DataFrame.")
+    if not isinstance(target_col_left, str):
+      raise TypeError("[DataManager] target column must be a string.")
+    if not isinstance(target_col_right, str):
+      raise TypeError("[DataManager] target column must be a string.")
+    if not isinstance(merge_type, str):
+      raise TypeError("[DataManager] merge_type must be a string.")
+    
+    #  validate columns
+    valid_col_left: str | None = None
+    valid_col_left: str | None = None
+    if formatted_col_left != "index":
+      valid_col_left = self.validate_col(target_df=target_df_left, target_col=target_col_left)
+    else:
+      valid_col_left = "index"
+    if formatted_col_right != "index":
+      valid_col_right: str = self.validate_col(target_df=target_df_right, target_col=target_col_right)
+    else:
+      valid_col_right = "index"
+    
+    #  validate merge type
+    if formatted_merge_type not in ["left", "right", "inner", "outer", "cross"]:
+      raise ValueError(f"[DataManager] failed to merge with {merge_type}. only accepted: inner, outer, left, right, and cross.")
+    if formatted_merge_type == "cross" and formatted_col_left == "index" and formatted_col_right == "index":
+      raise ValueError(f"[DataManager] cross merge method is not aapplicable for join indice.")
+    
+    #  merge tables
+    if formatted_col_left == "index" and formatted_col_right== "index":
+      output = target_df_left.join(target_df_right, how=merge_type, lsuffix="", rsuffix="_y")
+    
+    elif formatted_col_left == "index" and formatted_col_right != "index":
+      output = target_df_left.merge(target_df_right, left_index=True, right_on=valid_col_right, how=merge_type, suffixes=("", "_y"))
+    
+    elif formatted_col_left != "index" and formatted_col_right == "index":
+      output= target_df_left.merge(target_df_right, right_index=True, left_on=valid_col_left, how=merge_type, suffixes=("", "_y"))
+    
+    else:
+      output= target_df_left.merge(target_df_right, left_on=valid_col_left, right_on=valid_col_right, how=merge_type, suffixes=("", "_y"))
+    
+    #  output
+    print("[DataManager] a new merged table has been created.")
+    return output
     
     

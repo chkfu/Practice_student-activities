@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 from core import DataLoader, SQLConnector, DataManager
 from core.config.paths import PATH_DATA_USER, PATH_DATA_ACTIVITY, PATH_DATA_COMPONENT
@@ -60,7 +61,10 @@ def main():
   data_manager.print_df(df_activities)
   data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName="task2_rename-02")
   
-  
+  #  task 3: merge
+  merged_df = data_manager.merge_tables(target_df_left=df_users, target_df_right=df_activities, target_col_left="index", target_col_right="index")
+  data_manager.print_df(merged_df)
+  data_loader.convert_dataset(dataframe=df_activities, fileType="csv", fileName=f"task3_rmerge-01_{int(datetime.now().timestamp())}")
   
 #  OUTPUT
 
