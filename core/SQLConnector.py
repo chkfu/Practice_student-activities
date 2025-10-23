@@ -18,7 +18,7 @@ class SQLConnector:
           "host": host,
           "port": port
       }
-      self.db_name = "student_activities"
+      self.db_name = database
       self.initialise_database()
       self.initialise_tables()
 
