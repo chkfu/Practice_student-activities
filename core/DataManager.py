@@ -20,10 +20,14 @@ class DataManager:
   #  METHOD - REUSE
   
   def validate_col(self, target_df: pd.DataFrame, target_col: str) -> str:
-      output = next((col for col in target_df.columns if col.strip().lower() == target_col.strip().lower()), None)
-      if output is None:
-        raise ValueError("[DataManager] target column is not found.")
-      return output
+    #  for index
+    if target_col.strip().lower() == "index":
+      return "index"
+    #  for columns
+    output = next((col for col in target_df.columns if col.strip().lower() == target_col.strip().lower()), None)
+    if output is None:
+      raise ValueError("[DataManager] target column is not found.")
+    return output.strip()
     
   def update_valid_lists(self, target_df: pd.DataFrame, target_parameter: list, valid_list: list) -> None: 
     for el in target_parameter:
@@ -90,14 +94,12 @@ class DataManager:
     new_name_r: str = str(new_name).strip()
     
     # output
-    output: pd.DataFrame = target_df.rename(columns={valid_col: new_name_r})
+    output:  pd.DataFrame = target_df.rename(columns={valid_col: new_name_r})
     print(f"[DataManager] the target column {target_col} has been renamed as {new_name_r}")
     return output
     
     
-    
   def merge_tables(self, target_df_left: pd.DataFrame, target_df_right: pd.DataFrame, target_col_left: str, target_col_right: str, merge_type: str = "inner") -> pd.DataFrame:
-  
     # reuse
     formatted_col_left: str = target_col_left.strip().lower()
     formatted_col_right: str = target_col_right.strip().lower()
@@ -117,7 +119,7 @@ class DataManager:
     
     #  validate columns
     valid_col_left: str | None = None
-    valid_col_left: str | None = None
+    valid_col_right: str | None = None
     if formatted_col_left != "index":
       valid_col_left = self.validate_col(target_df=target_df_left, target_col=target_col_left)
     else:
@@ -135,16 +137,16 @@ class DataManager:
     
     #  merge tables
     if formatted_col_left == "index" and formatted_col_right== "index":
-      output = target_df_left.join(target_df_right, how=merge_type, lsuffix="", rsuffix="_y")
+      output =target_df_left.join(target_df_right, how=merge_type, lsuffix="", rsuffix="_y")
     
     elif formatted_col_left == "index" and formatted_col_right != "index":
-      output = target_df_left.merge(target_df_right, left_index=True, right_on=valid_col_right, how=merge_type, suffixes=("", "_y"))
+      output =target_df_left.merge(target_df_right, left_index=True, right_on=valid_col_right, how=merge_type, suffixes=("", "_y"))
     
     elif formatted_col_left != "index" and formatted_col_right == "index":
-      output= target_df_left.merge(target_df_right, right_index=True, left_on=valid_col_left, how=merge_type, suffixes=("", "_y"))
+      output=target_df_left.merge(target_df_right, right_index=True, left_on=valid_col_left, how=merge_type, suffixes=("", "_y"))
     
     else:
-      output= target_df_left.merge(target_df_right, left_on=valid_col_left, right_on=valid_col_right, how=merge_type, suffixes=("", "_y"))
+      output=target_df_left.merge(target_df_right, left_on=valid_col_left, right_on=valid_col_right, how=merge_type, suffixes=("", "_y"))
     
     #  output
     print("[DataManager] a new merged table has been created.")
